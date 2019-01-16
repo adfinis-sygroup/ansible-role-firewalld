@@ -1,8 +1,9 @@
 ---
 - name: install firewalld related packages
+  register: firewalld_register_packages_installed
+  until: firewalld_register_packages_installed is success
+  retries: 5
+  delay: 2
   package:
     name: '{{ firewalld_packages }}'
     state: present
-  tags:
-    - 'role::firewall'
-    - 'role::firewalld:install'
