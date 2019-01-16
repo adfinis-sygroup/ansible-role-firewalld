@@ -4,14 +4,14 @@
     name: firewalld
     state: started
     enabled: yes
-  when: firewalld_disable == false
+  when: not firewalld_disable
 
 - name: ensure firewalld is stopped and disabled on boot
   service:
     name: firewalld
     state: stopped
     enabled: no
-  when: firewalld_disable == true
+  when: firewalld_disable
 
 - name: add firewalld rules for services from vars
   firewalld:
@@ -21,7 +21,7 @@
     state: '{{ item.state | default ("enabled") }}'
   with_items: '{{ firewalld_allow_services }}'
   notify: firewalld complete reload
-  when: firewalld_disable == false
+  when: not firewalld_disable
 
 - name: add firewalld rules for ports from vars
   firewalld:
@@ -31,7 +31,7 @@
     state: '{{ item.state | default ("enabled") }}'
   with_items: '{{ firewalld_allow_ports }}'
   notify: firewalld complete reload
-  when: firewalld_disable == false
+  when: not firewalld_disable
 
 - name: add firewalld rich rules
   firewalld:
@@ -41,4 +41,4 @@
     state: '{{ item.state | default ("enabled") }}'
   with_items: '{{ firewalld_rich_rules }}'
   notify: firewalld complete reload
-  when: firewalld_disable == false
+  when: not firewalld_disable
