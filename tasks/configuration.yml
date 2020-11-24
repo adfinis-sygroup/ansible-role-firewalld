@@ -19,16 +19,16 @@
 
   - name: create firewalld zones
     firewalld:
-      zone: "{{zone.name}}"
+      zone: "{{ zone.name }}"
       state: present
       permanent: yes
-    register: firewalld_zones_created
+    register: firewalld_register_zones_created
     loop: "{{ firewalld_zones | default([]) }}"
     loop_control:
       loop_var: zone
 
   always:
-  - when: firewalld_zones_created.changed
+  - when: firewalld_register_zones_created.changed
     # see 'zone' notes: https://docs.ansible.com/ansible/latest/collections/ansible/posix/firewalld_module.html
     name: reload firewalld immediate
     systemd:
