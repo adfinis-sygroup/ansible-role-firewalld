@@ -2,8 +2,8 @@
 
 - name: firewalld activate by source
   firewalld:
-    zone: "{{zone.name}}"
-    source: "{{source}}"
+    zone: "{{ zone.name }}"
+    source: "{{ source }}"
     state: enabled
     permanent: yes
   loop: "{{ zone.sources }}"
