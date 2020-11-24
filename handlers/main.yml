@@ -1,4 +1,8 @@
 ---
-# 'service reload' was not always working, needs complete reload
+
 - name: firewalld reload firewalld
-  command: firewall-cmd --complete-reload
+  systemd:
+    name: firewalld
+    state: reloaded
+
+...
