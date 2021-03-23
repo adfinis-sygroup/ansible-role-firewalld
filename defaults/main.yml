@@ -1,6 +1,19 @@
 ---
+
 firewalld_allow_services: []
 firewalld_allow_ports: []
 firewalld_rich_rules: []
 
 firewalld_disable: false
+
+firewalld_zones: []
+## structure to provide zone names and sources
+# firewalld_zones:
+# - name: "teleport"
+# - name: "icinga"
+#   sources:
+#   - "{{ lookup('dig', 'test.example.com')}}/32"
+#   - 10.0.0.0/24"
+# - name: "bareos"
+
+...

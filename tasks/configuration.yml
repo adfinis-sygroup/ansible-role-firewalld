@@ -13,6 +13,38 @@
     enabled: no
   when: firewalld_disable
 
+- name: add firewalld zones
+  when: not firewalld_disable
+  block:
+
+  - name: create firewalld zones
+    firewalld:
+      zone: "{{ zone.name }}"
+      state: present
+      permanent: yes
+    register: firewalld_register_zones_created
+    loop: "{{ firewalld_zones | default([]) }}"
+    loop_control:
+      loop_var: zone
+
+  always:
+  - when: firewalld_register_zones_created.changed
+    # see 'zone' notes: https://docs.ansible.com/ansible/latest/collections/ansible/posix/firewalld_module.html
+    name: reload firewalld immediate
+    systemd:
+      name: firewalld
+      state: reloaded
+
+- name: activate firewalld zones by source
+  when: not firewalld_disable
+  block:
+
+  - name: activate firewalld zones
+    include_tasks: cfg_firewalld_zone.yml
+    loop: "{{ firewalld_zones | default([]) }}"
+    loop_control:
+      loop_var: zone
+
 - name: add firewalld rules for services from vars
   firewalld:
     service: '{{ item.service }}'
